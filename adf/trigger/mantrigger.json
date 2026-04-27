@@ -1,0 +1,24 @@
+{
+	"name": "mantrigger",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "prodPipeline",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/source/blobs/csvfiles/Fact_sales_1.csv",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/ec666a8d-b771-4535-8e61-ddcb8fb1e81d/resourceGroups/MK-ADFCourse/providers/Microsoft.Storage/storageAccounts/storagedatafactorymk",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}

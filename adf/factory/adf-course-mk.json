@@ -1,0 +1,15 @@
+{
+	"name": "adf-course-mk",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Enabled",
+			"editable": true
+		}
+	},
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "8caa2b37-78a0-485a-a0c6-076334dcecab",
+		"tenantId": "8d12b8b9-82ec-4709-a8c2-685fd34c3a33"
+	}
+}
