@@ -1,0 +1,15 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "practicestudio310"
+		},
+		"ls_kumar1001_accountKey": {
+			"value": ""
+		},
+		"ls_kumar1001_properties_typeProperties_url": {
+			"value": "https://kumar1001.dfs.core.windows.net/"
+		}
+	}
+}
