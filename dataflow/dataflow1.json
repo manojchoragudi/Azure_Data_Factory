@@ -36,7 +36,7 @@
 				"     ignoreNoFilesFound: false) ~> emp",
 				"emp sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:[''],",
+				"     partitionFileNames:['dfemp'],",
 				"     truncate: true,",
 				"     umask: 0022,",
 				"     preCommands: [],",
