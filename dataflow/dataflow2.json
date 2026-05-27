@@ -14,10 +14,6 @@
 			],
 			"sinks": [
 				{
-					"dataset": {
-						"referenceName": "ds_emp_sink",
-						"type": "DatasetReference"
-					},
 					"name": "sink1"
 				}
 			],
@@ -35,28 +31,16 @@
 				"     ignoreNoFilesFound: false) ~> employee",
 				"employee sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     input(",
-				"          id as integer,",
-				"          name as string,",
-				"          country as integer,",
-				"          sal as string,",
-				"          gen as integer",
-				"     ),",
-				"     deletable:false,",
-				"     insertable:true,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError',",
 				"     mapColumn(",
 				"          id,",
 				"          name = fname,",
 				"          country = {country     },",
 				"          sal,",
 				"          gen",
-				"     )) ~> sink1"
+				"     ),",
+				"     format: 'table') ~> sink1"
 			]
 		}
 	}
