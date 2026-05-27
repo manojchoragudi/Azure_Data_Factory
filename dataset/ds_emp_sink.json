@@ -1,0 +1,40 @@
+{
+	"name": "ds_emp_sink",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sqlserver1001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "name",
+				"type": "varchar"
+			},
+			{
+				"name": "country",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "sal",
+				"type": "varchar"
+			},
+			{
+				"name": "gen",
+				"type": "int",
+				"precision": 10
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "employee"
+		}
+	}
+}

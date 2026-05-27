@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_sqlserver",
+						"referenceName": "ds_emp_sink",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -25,23 +25,22 @@
 			"scriptLines": [
 				"source(output(",
 				"          id as integer,",
-				"          {     fname} as string,",
-				"          {     country     } as string,",
+				"          fname as string,",
+				"          {country     } as string,",
 				"          sal as integer,",
 				"          gen as string",
 				"     ),",
-				"     allowSchemaDrift: true,",
-				"     validateSchema: false,",
+				"     allowSchemaDrift: false,",
+				"     validateSchema: true,",
 				"     ignoreNoFilesFound: false) ~> employee",
 				"employee sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
 				"          id as integer,",
-				"          fname as string,",
-				"          lname as string,",
-				"          country as string,",
-				"          sal as integer,",
-				"          dno as integer",
+				"          name as string,",
+				"          country as integer,",
+				"          sal as string,",
+				"          gen as integer",
 				"     ),",
 				"     deletable:false,",
 				"     insertable:true,",
@@ -50,7 +49,14 @@
 				"     format: 'table',",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          id,",
+				"          name = fname,",
+				"          country = {country     },",
+				"          sal,",
+				"          gen",
+				"     )) ~> sink1"
 			]
 		}
 	}
