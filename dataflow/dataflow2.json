@@ -23,9 +23,6 @@
 			],
 			"transformations": [],
 			"scriptLines": [
-				"parameters{",
-				"     filename as string",
-				"}",
 				"source(output(",
 				"          empid as integer,",
 				"          ename as string,",
@@ -45,7 +42,14 @@
 				"     preCommands: [],",
 				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true,",
+				"     mapColumn(",
+				"          empid,",
+				"          ename,",
+				"          gen,",
+				"          sal,",
+				"          dno",
+				"     )) ~> sink1"
 			]
 		}
 	}
