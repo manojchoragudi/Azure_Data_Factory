@@ -287,7 +287,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_emp1",
+								"referenceName": "AzureSqlTable1",
 								"type": "DatasetReference"
 							},
 							"name": "sink1"
@@ -309,10 +309,9 @@
 						"source1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
-						"          id as integer,",
-						"          fname as string,",
-						"          lname as string,",
-						"          country as string,",
+						"          empid as integer,",
+						"          ename as string,",
+						"          gen as string,",
 						"          sal as integer,",
 						"          dno as integer",
 						"     ),",
@@ -323,13 +322,20 @@
 						"     format: 'table',",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          empid = id,",
+						"          ename = fname,",
+						"          gen = country,",
+						"          sal,",
+						"          dno",
+						"     )) ~> sink1"
 					]
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_emp')]",
-				"[concat(variables('factoryId'), '/datasets/ds_emp1')]"
+				"[concat(variables('factoryId'), '/datasets/AzureSqlTable1')]"
 			]
 		}
 	]
