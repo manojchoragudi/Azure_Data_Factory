@@ -16,8 +16,14 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "dataflow1",
-						"type": "DataFlowReference"
+						"referenceName": "dataflow2",
+						"type": "DataFlowReference",
+						"parameters": {
+							"filename": {
+								"value": "'@{testemp}'",
+								"type": "Expression"
+							}
+						}
 					},
 					"compute": {
 						"coreCount": 8,
