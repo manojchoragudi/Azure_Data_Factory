@@ -125,6 +125,51 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_emp_sink')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_sqlserver1001",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "id",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "name",
+						"type": "varchar"
+					},
+					{
+						"name": "country",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "sal",
+						"type": "varchar"
+					},
+					{
+						"name": "gen",
+						"type": "int",
+						"precision": 10
+					}
+				],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "employee"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_sqlserver1001')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_employee')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -138,7 +183,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "employee.txt",
+						"fileName": "employee 9.txt",
 						"fileSystem": "mydata"
 					},
 					"columnDelimiter": ",",
@@ -171,55 +216,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_kumar1001')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/ds_sqlserver')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "ls_sqlserver1001",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "id",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "fname",
-						"type": "varchar"
-					},
-					{
-						"name": "lname",
-						"type": "varchar"
-					},
-					{
-						"name": "country",
-						"type": "varchar"
-					},
-					{
-						"name": "sal",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "dno",
-						"type": "int",
-						"precision": 10
-					}
-				],
-				"typeProperties": {
-					"schema": "dbo",
-					"table": "employee"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/ls_sqlserver1001')]"
 			]
 		},
 		{
@@ -324,7 +320,7 @@
 					"sinks": [
 						{
 							"dataset": {
-								"referenceName": "ds_sqlserver",
+								"referenceName": "ds_emp_sink",
 								"type": "DatasetReference"
 							},
 							"name": "sink1"
@@ -334,23 +330,22 @@
 					"scriptLines": [
 						"source(output(",
 						"          id as integer,",
-						"          {     fname} as string,",
-						"          {     country     } as string,",
+						"          fname as string,",
+						"          {country     } as string,",
 						"          sal as integer,",
 						"          gen as string",
 						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
+						"     allowSchemaDrift: false,",
+						"     validateSchema: true,",
 						"     ignoreNoFilesFound: false) ~> employee",
 						"employee sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     input(",
 						"          id as integer,",
-						"          fname as string,",
-						"          lname as string,",
-						"          country as string,",
-						"          sal as integer,",
-						"          dno as integer",
+						"          name as string,",
+						"          country as integer,",
+						"          sal as string,",
+						"          gen as integer",
 						"     ),",
 						"     deletable:false,",
 						"     insertable:true,",
@@ -359,13 +354,20 @@
 						"     format: 'table',",
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
-						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+						"     errorHandlingOption: 'stopOnFirstError',",
+						"     mapColumn(",
+						"          id,",
+						"          name = fname,",
+						"          country = {country     },",
+						"          sal,",
+						"          gen",
+						"     )) ~> sink1"
 					]
 				}
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_employee')]",
-				"[concat(variables('factoryId'), '/datasets/ds_sqlserver')]"
+				"[concat(variables('factoryId'), '/datasets/ds_emp_sink')]"
 			]
 		},
 		{
