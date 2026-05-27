@@ -56,9 +56,14 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "dataflow1",
+								"referenceName": "dataflow2",
 								"type": "DataFlowReference",
-								"parameters": {},
+								"parameters": {
+									"filename": {
+										"value": "'@{testemp}'",
+										"type": "Expression"
+									}
+								},
 								"datasetParameters": {
 									"source1": {},
 									"sink1": {}
@@ -79,7 +84,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/dataflow1')]"
+				"[concat(variables('factoryId'), '/dataflows/dataflow2')]"
 			]
 		},
 		{
@@ -392,6 +397,9 @@
 					],
 					"transformations": [],
 					"scriptLines": [
+						"parameters{",
+						"     filename as string",
+						"}",
 						"source(output(",
 						"          empid as integer,",
 						"          ename as string,",
