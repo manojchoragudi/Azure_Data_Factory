@@ -231,6 +231,11 @@
 					"referenceName": "ls_kumar1001",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"filename": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
 				"type": "DelimitedText",
 				"typeProperties": {
@@ -346,9 +351,6 @@
 					],
 					"transformations": [],
 					"scriptLines": [
-						"parameters{",
-						"     filename as string",
-						"}",
 						"source(output(",
 						"          empid as integer,",
 						"          ename as string,",
@@ -368,7 +370,14 @@
 						"     preCommands: [],",
 						"     postCommands: [],",
 						"     skipDuplicateMapInputs: true,",
-						"     skipDuplicateMapOutputs: true) ~> sink1"
+						"     skipDuplicateMapOutputs: true,",
+						"     mapColumn(",
+						"          empid,",
+						"          ename,",
+						"          gen,",
+						"          sal,",
+						"          dno",
+						"     )) ~> sink1"
 					]
 				}
 			},
@@ -399,15 +408,12 @@
 							"dataflow": {
 								"referenceName": "dataflow2",
 								"type": "DataFlowReference",
-								"parameters": {
-									"filename": {
-										"value": "'@{testemp}'",
-										"type": "Expression"
-									}
-								},
+								"parameters": {},
 								"datasetParameters": {
 									"source1": {},
-									"sink1": {}
+									"sink1": {
+										"filename": "emptest"
+									}
 								}
 							},
 							"staging": {},
