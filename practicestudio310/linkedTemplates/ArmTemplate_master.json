@@ -11,9 +11,25 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'ls_kumar1001'"
 		},
+		"ls_sqlserver1001_password": {
+			"type": "secureString",
+			"metadata": "Secure string for 'password' of 'ls_sqlserver1001'"
+		},
 		"ls_kumar1001_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://kumar1001.dfs.core.windows.net/"
+		},
+		"ls_sqlserver1001_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "practiceserver1001.database.windows.net"
+		},
+		"ls_sqlserver1001_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "practicedb"
+		},
+		"ls_sqlserver1001_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "sqladmin"
 		},
 		"containerUri": {
 			"type": "string",
@@ -45,8 +61,20 @@
 					"ls_kumar1001_accountKey": {
 						"value": "[parameters('ls_kumar1001_accountKey')]"
 					},
+					"ls_sqlserver1001_password": {
+						"value": "[parameters('ls_sqlserver1001_password')]"
+					},
 					"ls_kumar1001_properties_typeProperties_url": {
 						"value": "[parameters('ls_kumar1001_properties_typeProperties_url')]"
+					},
+					"ls_sqlserver1001_properties_typeProperties_server": {
+						"value": "[parameters('ls_sqlserver1001_properties_typeProperties_server')]"
+					},
+					"ls_sqlserver1001_properties_typeProperties_database": {
+						"value": "[parameters('ls_sqlserver1001_properties_typeProperties_database')]"
+					},
+					"ls_sqlserver1001_properties_typeProperties_userName": {
+						"value": "[parameters('ls_sqlserver1001_properties_typeProperties_userName')]"
 					}
 				}
 			},
