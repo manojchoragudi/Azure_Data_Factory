@@ -12,7 +12,15 @@
 					"name": "emp"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
 			"transformations": [
 				{
 					"name": "select1"
@@ -32,14 +40,23 @@
 				"     ignoreNoFilesFound: false) ~> emp",
 				"emp select(mapColumn(",
 				"          ecode = id,",
-				"          firstname = fname,",
-				"          lastname = lname,",
+				"          dptno = dno,",
 				"          country,",
 				"          salary = sal,",
-				"          dptno = dno",
+				"          firstname = fname",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> select1"
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['newemp'],",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
