@@ -677,7 +677,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "selectdf",
+								"referenceName": "DerivedcolumnDF1",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
@@ -700,7 +700,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/selectdf')]"
+				"[concat(variables('factoryId'), '/dataflows/DerivedcolumnDF1')]"
 			]
 		},
 		{
