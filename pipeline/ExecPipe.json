@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "DerivedcolumnDF1",
+						"referenceName": "cleannullDF",
 						"type": "DataFlowReference"
 					},
 					"compute": {
