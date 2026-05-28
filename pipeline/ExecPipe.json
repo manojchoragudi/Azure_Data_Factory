@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "selectdf",
+						"referenceName": "DerivedcolumnDF1",
 						"type": "DataFlowReference"
 					},
 					"compute": {
