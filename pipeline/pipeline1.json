@@ -16,13 +16,8 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "dataflow2",
-						"type": "DataFlowReference",
-						"datasetParameters": {
-							"sink1": {
-								"filename": "emptest"
-							}
-						}
+						"referenceName": "Filter1",
+						"type": "DataFlowReference"
 					},
 					"compute": {
 						"coreCount": 8,
