@@ -1,9 +1,9 @@
 {
-	"name": "pipeline2",
+	"name": "ExecPipe",
 	"properties": {
 		"activities": [
 			{
-				"name": "Data flow1",
+				"name": "executePipe",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
