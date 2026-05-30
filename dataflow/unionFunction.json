@@ -17,6 +17,13 @@
 						"type": "DatasetReference"
 					},
 					"name": "emp2"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_emp9",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
 				}
 			],
 			"sinks": [
@@ -56,6 +63,16 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> emp2",
+				"source(output(",
+				"          id as string,",
+				"          { fname} as string,",
+				"          { country} as string,",
+				"          { sal} as string,",
+				"          { gen} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
 				"emp1, emp2 union(byName: true)~> union1",
 				"union1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
