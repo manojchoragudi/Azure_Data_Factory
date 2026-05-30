@@ -9,18 +9,30 @@
 						"referenceName": "ds_customer9",
 						"type": "DatasetReference"
 					},
-					"name": "source1"
+					"name": "emp1"
 				},
 				{
 					"dataset": {
 						"referenceName": "ds_emp1_1",
 						"type": "DatasetReference"
 					},
-					"name": "source2"
+					"name": "emp2"
 				}
 			],
-			"sinks": [],
-			"transformations": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_output",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "union1"
+				}
+			],
 			"scriptLines": [
 				"source(output(",
 				"          id as string,",
@@ -32,7 +44,7 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source1",
+				"     ignoreNoFilesFound: false) ~> emp1",
 				"source(output(",
 				"          id as string,",
 				"          { fname} as string,",
@@ -43,7 +55,18 @@
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     ignoreNoFilesFound: false) ~> source2"
+				"     ignoreNoFilesFound: false) ~> emp2",
+				"emp1, emp2 union(byName: true)~> union1",
+				"union1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['allempfiled'],",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
