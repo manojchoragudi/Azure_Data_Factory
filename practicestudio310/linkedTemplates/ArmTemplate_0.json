@@ -286,6 +286,10 @@
 					{
 						"name": " dno",
 						"type": "String"
+					},
+					{
+						"name": " gen",
+						"type": "String"
 					}
 				]
 			},
@@ -537,6 +541,9 @@
 					"transformations": [
 						{
 							"name": "derivedColumn1"
+						},
+						{
+							"name": "derivedColumn2"
 						}
 					],
 					"scriptLines": [
@@ -546,7 +553,8 @@
 						"          { lname} as string,",
 						"          { region} as string,",
 						"          { salary} as integer,",
-						"          { dno} as integer",
+						"          { dno} as integer,",
+						"          { gen} as string",
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
@@ -557,9 +565,11 @@
 						"          grade = iif({ salary} > 75000, \"A\",\r",
 						"    iif({ salary} >50000, \"B\",\r",
 						"    iif({ salary}>= 0, \"C\", \"NoGrade\")))) ~> derivedColumn1",
-						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"derivedColumn1 derive({ gender} = iif({ gen} == \"m\", \"Male\",\r",
+						"    iif({ gen} == \"f\", \"Female\", \"gen\"))) ~> derivedColumn2",
+						"derivedColumn2 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     partitionFileNames:['nullfiles'],",
+						"     partitionFileNames:['nullfiles1'],",
 						"     truncate: true,",
 						"     umask: 0022,",
 						"     preCommands: [],",
@@ -783,7 +793,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "executePipe",
+						"name": "Data flow1",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
