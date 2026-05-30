@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "cleannullDF",
+						"referenceName": "unionFunction",
 						"type": "DataFlowReference"
 					},
 					"compute": {
