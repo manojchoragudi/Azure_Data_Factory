@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "employee 9.txt",
+				"fileName": "emp2.txt",
 				"fileSystem": "mydata"
 			},
 			"columnDelimiter": ",",
