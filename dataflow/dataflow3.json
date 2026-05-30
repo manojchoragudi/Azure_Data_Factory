@@ -1,5 +1,5 @@
 {
-	"name": "unionFunction",
+	"name": "dataflow3",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -17,20 +17,19 @@
 						"type": "DatasetReference"
 					},
 					"name": "emp2"
-				}
-			],
-			"sinks": [
+				},
 				{
 					"dataset": {
-						"referenceName": "ds_output",
+						"referenceName": "ds_emp9",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "emp3"
 				}
 			],
+			"sinks": [],
 			"transformations": [
 				{
-					"name": "union1"
+					"name": "derivedColumn1"
 				}
 			],
 			"scriptLines": [
@@ -56,17 +55,17 @@
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> emp2",
-				"emp1, emp2 union(byName: true)~> union1",
-				"union1 sink(allowSchemaDrift: true,",
+				"source(output(",
+				"          id as string,",
+				"          { fname} as string,",
+				"          { country} as string,",
+				"          { sal} as string,",
+				"          { gen} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:['allempfiled'],",
-				"     truncate: true,",
-				"     umask: 0022,",
-				"     preCommands: [],",
-				"     postCommands: [],",
-				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> sink1"
+				"     ignoreNoFilesFound: false) ~> emp3",
+				"emp3 derive(fname = \"Unknown\") ~> derivedColumn1"
 			]
 		}
 	}
