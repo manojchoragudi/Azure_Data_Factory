@@ -404,6 +404,55 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_emp9')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_kumar1001",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "employee 9.txt",
+						"fileSystem": "mydata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "id",
+						"type": "String"
+					},
+					{
+						"name": " fname",
+						"type": "String"
+					},
+					{
+						"name": " country",
+						"type": "String"
+					},
+					{
+						"name": " sal",
+						"type": "String"
+					},
+					{
+						"name": " gen",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_kumar1001')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_output')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -916,6 +965,13 @@
 								"type": "DatasetReference"
 							},
 							"name": "emp2"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_emp9",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
 						}
 					],
 					"sinks": [
@@ -955,6 +1011,16 @@
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false) ~> emp2",
+						"source(output(",
+						"          id as string,",
+						"          { fname} as string,",
+						"          { country} as string,",
+						"          { sal} as string,",
+						"          { gen} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
 						"emp1, emp2 union(byName: true)~> union1",
 						"union1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
@@ -972,6 +1038,7 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_customer9')]",
 				"[concat(variables('factoryId'), '/datasets/ds_emp')]",
+				"[concat(variables('factoryId'), '/datasets/ds_emp9')]",
 				"[concat(variables('factoryId'), '/datasets/ds_output')]"
 			]
 		},
@@ -1001,51 +1068,6 @@
 								"datasetParameters": {
 									"emp1": {},
 									"emp2": {},
-									"sink1": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/unionFunction')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Data flow1",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "Filter1",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
 									"source1": {},
 									"sink1": {}
 								}
@@ -1065,7 +1087,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/Filter1')]"
+				"[concat(variables('factoryId'), '/dataflows/unionFunction')]"
 			]
 		}
 	]
