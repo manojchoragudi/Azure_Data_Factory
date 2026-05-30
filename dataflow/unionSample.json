@@ -44,6 +44,12 @@
 				},
 				{
 					"name": "select1"
+				},
+				{
+					"name": "union1"
+				},
+				{
+					"name": "union2"
 				}
 			],
 			"scriptLines": [
@@ -87,16 +93,18 @@
 				"          id,",
 				"          { fname},",
 				"          { lname},",
-				"          { salary},",
 				"          { region},",
+				"          { salary},",
 				"          { dno},",
 				"          { city}",
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"derivedColumn1, derivedColumn2 union(byName: true)~> union1",
+				"union1, select1 union(byName: true)~> union2",
+				"union2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:['sampleoutput'],",
+				"     partitionFileNames:['sampleOutput'],",
 				"     truncate: true,",
 				"     umask: 0022,",
 				"     preCommands: [],",
