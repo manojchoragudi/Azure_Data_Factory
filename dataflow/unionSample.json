@@ -28,6 +28,10 @@
 			],
 			"sinks": [
 				{
+					"dataset": {
+						"referenceName": "ds_output",
+						"type": "DatasetReference"
+					},
 					"name": "sink1"
 				}
 			],
@@ -92,8 +96,14 @@
 				"     skipDuplicateMapOutputs: true) ~> select1",
 				"derivedColumn1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
+				"     partitionFileNames:['sampleoutput'],",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
-				"     skipDuplicateMapOutputs: true) ~> sink1"
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}
