@@ -1005,7 +1005,7 @@
 						},
 						{
 							"dataset": {
-								"referenceName": "ds_emp1_1",
+								"referenceName": "ds_emp",
 								"type": "DatasetReference"
 							},
 							"name": "emp2"
@@ -1039,11 +1039,11 @@
 						"     ignoreNoFilesFound: false) ~> emp1",
 						"source(output(",
 						"          id as string,",
-						"          { fname} as string,",
+						"          fname as string,",
 						"          lname as string,",
-						"          { country} as string,",
-						"          { sal} as string,",
-						"          { dno} as string",
+						"          country as string,",
+						"          sal as string,",
+						"          dno as string",
 						"     ),",
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
@@ -1064,7 +1064,7 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_customer9')]",
-				"[concat(variables('factoryId'), '/datasets/ds_emp1_1')]",
+				"[concat(variables('factoryId'), '/datasets/ds_emp')]",
 				"[concat(variables('factoryId'), '/datasets/ds_output')]"
 			]
 		}
