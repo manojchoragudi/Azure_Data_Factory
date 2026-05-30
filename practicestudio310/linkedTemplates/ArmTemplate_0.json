@@ -139,6 +139,59 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_customer9')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_kumar1001",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "customer_2",
+						"fileSystem": "mydata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "id",
+						"type": "String"
+					},
+					{
+						"name": "fname",
+						"type": "String"
+					},
+					{
+						"name": "lname",
+						"type": "String"
+					},
+					{
+						"name": "country",
+						"type": "String"
+					},
+					{
+						"name": "sal",
+						"type": "String"
+					},
+					{
+						"name": "dno",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_kumar1001')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_emp')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -238,6 +291,59 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ls_sqlserver1001')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_emp1_1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_kumar1001",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "emp (1).text",
+						"fileSystem": "mydata"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "id",
+						"type": "String"
+					},
+					{
+						"name": " fname",
+						"type": "String"
+					},
+					{
+						"name": "lname",
+						"type": "String"
+					},
+					{
+						"name": " country",
+						"type": "String"
+					},
+					{
+						"name": " sal",
+						"type": "String"
+					},
+					{
+						"name": " dno",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ls_kumar1001')]"
 			]
 		},
 		{
@@ -562,9 +668,12 @@
 						"emp derive({ salary} = coalesce({ salary}, 0),",
 						"          { region} = iif(isNull({ region}) || trim({ region}) == '', 'UNKNOWN', { region}),",
 						"          { fname} = initCap(lower({ fname})),",
-						"          grade = iif({ salary} > 75000, \"A\",\r",
-						"    iif({ salary} >50000, \"B\",\r",
-						"    iif({ salary}>= 0, \"C\", \"NoGrade\")))) ~> derivedColumn1",
+						"          grade = case({ salary} > 75000, \"A\",\r",
+						"    { salary} >50000, \"B\",\r",
+						"    { salary}>= 0, \"C\", \"NoGrade\"),",
+						"          { dno} = case({ dno}== 101, \"Marketing\",\r",
+						"        { dno}==202, \"Finance\",\r",
+						"        { dno}== 303, \"HumarResource\", \"other\")) ~> derivedColumn1",
 						"derivedColumn1 derive({ gender} = iif({ gen} == \"m\", \"Male\",\r",
 						"    iif({ gen} == \"f\", \"Female\", \"gen\"))) ~> derivedColumn2",
 						"derivedColumn2 sink(allowSchemaDrift: true,",
@@ -783,6 +892,86 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/ds_emp')]",
+				"[concat(variables('factoryId'), '/datasets/ds_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/unionFunction')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_customer9",
+								"type": "DatasetReference"
+							},
+							"name": "emp1"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_emp1_1",
+								"type": "DatasetReference"
+							},
+							"name": "emp2"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_output",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "union1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          id as string,",
+						"          fname as string,",
+						"          lname as string,",
+						"          country as string,",
+						"          sal as string,",
+						"          dno as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> emp1",
+						"source(output(",
+						"          id as string,",
+						"          { fname} as string,",
+						"          lname as string,",
+						"          { country} as string,",
+						"          { sal} as string,",
+						"          { dno} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> emp2",
+						"emp1, emp2 union(byName: true)~> union1",
+						"union1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['allempfiled'],",
+						"     truncate: true,",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_customer9')]",
+				"[concat(variables('factoryId'), '/datasets/ds_emp1_1')]",
 				"[concat(variables('factoryId'), '/datasets/ds_output')]"
 			]
 		},
