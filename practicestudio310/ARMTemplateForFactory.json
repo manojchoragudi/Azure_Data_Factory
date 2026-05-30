@@ -62,7 +62,6 @@
 								"datasetParameters": {
 									"emp1": {},
 									"emp2": {},
-									"source1": {},
 									"sink1": {}
 								}
 							},
@@ -472,7 +471,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "employee 9.txt",
+						"fileName": "emp2.txt",
 						"fileSystem": "mydata"
 					},
 					"columnDelimiter": ",",
@@ -1059,13 +1058,6 @@
 								"type": "DatasetReference"
 							},
 							"name": "emp2"
-						},
-						{
-							"dataset": {
-								"referenceName": "ds_emp9",
-								"type": "DatasetReference"
-							},
-							"name": "source1"
 						}
 					],
 					"sinks": [
@@ -1105,16 +1097,6 @@
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false) ~> emp2",
-						"source(output(",
-						"          id as string,",
-						"          { fname} as string,",
-						"          { country} as string,",
-						"          { sal} as string,",
-						"          { gen} as string",
-						"     ),",
-						"     allowSchemaDrift: true,",
-						"     validateSchema: false,",
-						"     ignoreNoFilesFound: false) ~> source1",
 						"emp1, emp2 union(byName: true)~> union1",
 						"union1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
@@ -1126,6 +1108,116 @@
 						"     skipDuplicateMapInputs: true,",
 						"     skipDuplicateMapOutputs: true,",
 						"     partitionBy('hash', 1)) ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_customer9')]",
+				"[concat(variables('factoryId'), '/datasets/ds_emp')]",
+				"[concat(variables('factoryId'), '/datasets/ds_output')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/union_function')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "ds_customer9",
+								"type": "DatasetReference"
+							},
+							"name": "source1"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_emp",
+								"type": "DatasetReference"
+							},
+							"name": "source2"
+						},
+						{
+							"dataset": {
+								"referenceName": "ds_emp9",
+								"type": "DatasetReference"
+							},
+							"name": "source3"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "ds_output",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [
+						{
+							"name": "derivedColumn1"
+						},
+						{
+							"name": "derivedColumn2"
+						},
+						{
+							"name": "select1"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          id as string,",
+						"          fname as string,",
+						"          lname as string,",
+						"          country as string,",
+						"          sal as string,",
+						"          dno as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source1",
+						"source(output(",
+						"          id as string,",
+						"          fname as string,",
+						"          lname as string,",
+						"          country as string,",
+						"          sal as string,",
+						"          dno as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source2",
+						"source(output(",
+						"          id as string,",
+						"          { fname} as string,",
+						"          { country} as string,",
+						"          { sal} as string,",
+						"          { gen} as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> source3",
+						"source1 derive(city = \"Unknown\") ~> derivedColumn1",
+						"source2 derive(city = \"Unknown\") ~> derivedColumn2",
+						"source3 select(mapColumn(",
+						"          id,",
+						"          { fname},",
+						"          { country},",
+						"          { sal},",
+						"          { gen}",
+						"     ),",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> select1",
+						"derivedColumn1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     umask: 0022,",
+						"     preCommands: [],",
+						"     postCommands: [],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true) ~> sink1"
 					]
 				}
 			},
