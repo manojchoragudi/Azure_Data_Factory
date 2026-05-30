@@ -157,7 +157,7 @@
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
-					"firstRowAsHeader": true,
+					"firstRowAsHeader": false,
 					"quoteChar": "\""
 				},
 				"schema": [
@@ -365,7 +365,7 @@
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
-					"firstRowAsHeader": true,
+					"firstRowAsHeader": false,
 					"quoteChar": "\""
 				},
 				"schema": [
@@ -995,11 +995,12 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "cleannullDF",
+								"referenceName": "unionFunction",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"emp": {},
+									"emp1": {},
+									"emp2": {},
 									"sink1": {}
 								}
 							},
@@ -1018,7 +1019,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/cleannullDF')]"
+				"[concat(variables('factoryId'), '/dataflows/unionFunction')]"
 			]
 		},
 		{
