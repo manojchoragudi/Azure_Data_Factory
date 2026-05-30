@@ -1,0 +1,100 @@
+{
+	"name": "unionSample",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_sam1",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sam2",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sam3",
+						"type": "DatasetReference"
+					},
+					"name": "source3"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          { fname} as string,",
+				"          { lname} as string,",
+				"          { region} as string,",
+				"          { salary} as string,",
+				"          { dno} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          id as string,",
+				"          { fname} as string,",
+				"          { lname} as string,",
+				"          { region} as string,",
+				"          { salary} as string,",
+				"          { dno} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2",
+				"source(output(",
+				"          id as string,",
+				"          { fname} as string,",
+				"          { lname} as string,",
+				"          { region} as string,",
+				"          { salary} as string,",
+				"          { dno} as string,",
+				"          { city} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source3",
+				"source1 derive(city = \"Unknown\") ~> derivedColumn1",
+				"source2 derive(city = \"Unknown\") ~> derivedColumn2",
+				"source3 select(mapColumn(",
+				"          id,",
+				"          { fname},",
+				"          { lname},",
+				"          { salary},",
+				"          { region},",
+				"          { dno},",
+				"          { city}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
