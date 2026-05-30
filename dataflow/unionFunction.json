@@ -13,7 +13,7 @@
 				},
 				{
 					"dataset": {
-						"referenceName": "ds_emp1_1",
+						"referenceName": "ds_emp",
 						"type": "DatasetReference"
 					},
 					"name": "emp2"
@@ -47,11 +47,11 @@
 				"     ignoreNoFilesFound: false) ~> emp1",
 				"source(output(",
 				"          id as string,",
-				"          { fname} as string,",
+				"          fname as string,",
 				"          lname as string,",
-				"          { country} as string,",
-				"          { sal} as string,",
-				"          { dno} as string",
+				"          country as string,",
+				"          sal as string,",
+				"          dno as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
