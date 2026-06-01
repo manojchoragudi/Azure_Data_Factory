@@ -262,7 +262,7 @@
 						"union1, select1 union(byName: true)~> union2",
 						"union2 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     partitionFileNames:['sampleOutput'],",
+						"     partitionFileNames:['sampfilesdata'],",
 						"     truncate: true,",
 						"     umask: 0022,",
 						"     preCommands: [],",
@@ -295,12 +295,13 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "unionFunction",
+								"referenceName": "unionSample",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"emp1": {},
-									"emp2": {},
+									"source1": {},
+									"source2": {},
+									"source3": {},
 									"sink1": {}
 								}
 							},
@@ -319,7 +320,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/unionFunction')]"
+				"[concat(variables('factoryId'), '/dataflows/unionSample')]"
 			]
 		},
 		{
