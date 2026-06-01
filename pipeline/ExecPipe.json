@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "unionFunction",
+						"referenceName": "unionSample",
 						"type": "DataFlowReference"
 					},
 					"compute": {

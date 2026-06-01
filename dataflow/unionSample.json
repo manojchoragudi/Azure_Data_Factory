@@ -104,7 +104,7 @@
 				"union1, select1 union(byName: true)~> union2",
 				"union2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:['sampleOutput'],",
+				"     partitionFileNames:['sampfilesdata'],",
 				"     truncate: true,",
 				"     umask: 0022,",
 				"     preCommands: [],",
