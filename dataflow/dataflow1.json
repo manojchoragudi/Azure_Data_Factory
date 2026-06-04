@@ -1,0 +1,153 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_etext",
+						"type": "DatasetReference"
+					},
+					"name": "emp"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dpt",
+						"type": "DatasetReference"
+					},
+					"name": "dpt"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_manager",
+						"type": "DatasetReference"
+					},
+					"name": "manager"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_target",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "derivedColumn3"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "derivedColumn4"
+				},
+				{
+					"name": "select2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          { name} as string,",
+				"          { salary} as integer,",
+				"          { gen} as string,",
+				"          { dno} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> emp",
+				"source(output(",
+				"          dno as string,",
+				"          { dname} as string,",
+				"          { place} as string,",
+				"          { mid} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> dpt",
+				"source(output(",
+				"          mid as string,",
+				"          { mname} as string,",
+				"          { phone} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> manager",
+				"derivedColumn1, derivedColumn2 join({ dno} == dno,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"emp derive({ dno} = trim({ dno}, \" \"),",
+				"          { salary} = iifNull({ salary}, 0)) ~> derivedColumn1",
+				"join1, derivedColumn3 join({ mid} == mid,",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"dpt derive(dno = trim(dno, \" \"),",
+				"          { mid} = trim({ mid}, \" \")) ~> derivedColumn2",
+				"manager derive(mid = trim(mid, \" \")) ~> derivedColumn3",
+				"join2 select(mapColumn(",
+				"          id,",
+				"          { name},",
+				"          { salary},",
+				"          { gen},",
+				"          { dno1} = { dno},",
+				"          dno2 = dno,",
+				"          { dname},",
+				"          { place},",
+				"          { mid1} = { mid},",
+				"          mid2 = mid,",
+				"          { mname},",
+				"          { phone}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 derive({ deptno} = iif(isNull({ dno1}),dno2,\r",
+				"iif(isNull(dno2), { dno1}, dno2))) ~> derivedColumn4",
+				"derivedColumn4 select(mapColumn(",
+				"          id,",
+				"          { name},",
+				"          { salary},",
+				"          { dno} = { deptno},",
+				"          { gen},",
+				"          { dname},",
+				"          { place},",
+				"          { mid1},",
+				"          mid2,",
+				"          { mname},",
+				"          { phone}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['fulljoin '],",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

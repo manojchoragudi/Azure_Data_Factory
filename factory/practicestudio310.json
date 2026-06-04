@@ -1,0 +1,15 @@
+{
+	"name": "practicestudio310",
+	"properties": {
+		"trustModeClaimForMi": {
+			"value": "Disabled",
+			"editable": true
+		}
+	},
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "b095a921-8aad-4dcf-84a3-1d33e0b79a7c",
+		"tenantId": "e66ccc18-5e69-427e-858b-90c3c1dbc997"
+	}
+}

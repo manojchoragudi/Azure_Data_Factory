@@ -1,0 +1,112 @@
+{
+	"name": "union",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_etext",
+						"type": "DatasetReference"
+					},
+					"name": "e1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_edm",
+						"type": "DatasetReference"
+					},
+					"name": "source2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_target",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "aggregate1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          { name} as string,",
+				"          { salary} as integer,",
+				"          { gen} as string,",
+				"          { dno} as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> e1",
+				"source(output(",
+				"          id as string,",
+				"          { name} as string,",
+				"          { salary} as integer,",
+				"          { dno} as integer,",
+				"          { gen} as string,",
+				"          { dname} as string,",
+				"          { place} as string,",
+				"          { mid1} as string,",
+				"          mid2 as string,",
+				"          { mname} as string,",
+				"          { phone} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source2",
+				"e1, source2 join(e1@{ dno} == source2@{ dno},",
+				"     joinType:'outer',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 select(mapColumn(",
+				"          id = e1@id,",
+				"          { name} = e1@{ name},",
+				"          { salary} = e1@{ salary},",
+				"          { gen} = e1@{ gen},",
+				"          { dno1} = e1@{ dno},",
+				"          id = source2@id,",
+				"          { name} = source2@{ name},",
+				"          { salary} = source2@{ salary},",
+				"          { dno2} = source2@{ dno},",
+				"          { gen} = source2@{ gen},",
+				"          { dname},",
+				"          { place},",
+				"          { mid1},",
+				"          mid2,",
+				"          { mname},",
+				"          { phone}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 derive(status = iif( not(isNull({ dno1})) && not(isNull({ dno2})) , \"Active\", \r",
+				"        iif(isNull({ dno2}), \"BenchTEam\", \"BenchProject\")),",
+				"          { salary} = iifNull({ salary}, 0)) ~> derivedColumn1",
+				"derivedColumn1 aggregate(groupBy(status),",
+				"     { salary} = sum({ salary})) ~> aggregate1",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}
