@@ -1,0 +1,59 @@
+{
+	"name": "pivot",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_pivotfiles",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_backups",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "derivedColumn2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          gend as string,",
+				"          total_total11_employees as integer,",
+				"          total_total12_employees as integer,",
+				"          total_total13_employees as integer,",
+				"          total_total14_employees as integer,",
+				"          total_total15_employees as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(total_total14_employees = iifNull(total_total14_employees, 0),",
+				"          total_total15_employees = iifNull(total_total15_employees, 0)) ~> derivedColumn1",
+				"derivedColumn1 derive(total = total_total11_employees+total_total12_employees+total_total13_employees+total_total14_employees+total_total15_employees) ~> derivedColumn2",
+				"derivedColumn2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['pivot2'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

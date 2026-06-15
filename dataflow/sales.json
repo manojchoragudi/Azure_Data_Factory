@@ -1,0 +1,72 @@
+{
+	"name": "sales",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_sales",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_target",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "derivedColumn2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          dos as string,",
+				"          Price as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(month = toInteger(substring(dos, 5, 2))) ~> derivedColumn1",
+				"derivedColumn2 aggregate(groupBy(monthname),",
+				"     Price = sum(Price)) ~> aggregate1",
+				"derivedColumn1 derive(monthname = case(month == 1, \"jan\",\r",
+				"    month == 2, \"feb\",\r",
+				"    month == 3, \"mar\",\r",
+				"    month == 4, \"apr\",\r",
+				"    month == 5, \"may\",\r",
+				"    month == 6, \"jun\",\r",
+				"    month == 7, \"jul\",\r",
+				"    month == 8, \"aug\",\r",
+				"    month == 9, \"sep\",\r",
+				"    month == 10, \"oct\",\r",
+				"    month == 11, \"nov\",\r",
+				"    month == 12, \"dec\"),",
+				"          Price = iifNull(Price, 0)) ~> derivedColumn2",
+				"aggregate1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['monthly sales'],",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

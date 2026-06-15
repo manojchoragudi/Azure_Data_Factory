@@ -1,0 +1,49 @@
+{
+	"name": "ds_pivotfiles",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_kumar1001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Pivotfile",
+				"fileSystem": "backups"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "gend",
+				"type": "String"
+			},
+			{
+				"name": "total_total11_employees",
+				"type": "String"
+			},
+			{
+				"name": "total_total12_employees",
+				"type": "String"
+			},
+			{
+				"name": "total_total13_employees",
+				"type": "String"
+			},
+			{
+				"name": "total_total14_employees",
+				"type": "String"
+			},
+			{
+				"name": "total_total15_employees",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

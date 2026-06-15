@@ -1,0 +1,60 @@
+{
+	"name": "exists",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_trans",
+						"type": "DatasetReference"
+					},
+					"name": "products"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_target",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "split1"
+				},
+				{
+					"name": "exists1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          trid as string,",
+				"          cid as string,",
+				"          pid as string,",
+				"          price as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> products",
+				"products split(pid =='p1',",
+				"     pid =='p2',",
+				"     disjoint: false) ~> split1@(p1customer, p2customers, others)",
+				"split1@p1customer, split1@p2customers exists(split1@p1customer@cid == split1@p2customers@cid,",
+				"     negate:false,",
+				"     broadcast: 'auto')~> exists1",
+				"exists1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['existsData'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

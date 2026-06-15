@@ -2,7 +2,7 @@
 	"name": "practicestudio310",
 	"properties": {
 		"trustModeClaimForMi": {
-			"value": "Enabled",
+			"value": "Disabled",
 			"editable": true
 		}
 	},

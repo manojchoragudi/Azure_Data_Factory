@@ -1,0 +1,36 @@
+{
+	"name": "ds_erows",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sqlserver1001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "rowid",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "name",
+				"type": "char"
+			},
+			{
+				"name": "city",
+				"type": "char"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "erows"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

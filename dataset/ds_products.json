@@ -1,0 +1,37 @@
+{
+	"name": "ds_products",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_kumar1001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "products.txt",
+				"fileSystem": "mydata"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "prid",
+				"type": "String"
+			},
+			{
+				"name": "pname",
+				"type": "String"
+			},
+			{
+				"name": "price",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,151 @@
+{
+	"name": "Practicereport",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_sales",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_backups",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_backups",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "monthlysale1"
+				},
+				{
+					"name": "monthlysales2"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "derivedColumn3"
+				},
+				{
+					"name": "qprice1"
+				},
+				{
+					"name": "qprice2"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "derivedColumn4"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "sort1"
+				},
+				{
+					"name": "sort2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          dos as string,",
+				"          Price as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 derive(month = toInteger(substring(dos, 5, 2))) ~> derivedColumn1",
+				"derivedColumn1 aggregate(groupBy(month),",
+				"     price = sum(Price)) ~> monthlysale1",
+				"derivedColumn1 aggregate(groupBy(month),",
+				"     Price = sum(Price)) ~> monthlysales2",
+				"monthlysales2, monthlysale1 join(monthlysales2@month - monthlysale1@month ==1,",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 select(mapColumn(",
+				"          cm = monthlysales2@month,",
+				"          cmtot = monthlysales2@Price,",
+				"          pm = monthlysale1@month,",
+				"          pmtot = monthlysale1@price",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 derive(grate = ((cmtot-pmtot)/pmtot) * 100,",
+				"          gstatus = iif(cmtot > pmtot, \"Increased\",\r",
+				"   iif(cmtot == pmtot ,\"equal\", \"decreased\"))) ~> derivedColumn2",
+				"monthlysale1 derive(q = case(month < 4, 1,\r",
+				"    month <7, 2,\r",
+				"    month < 10, 3, 4)) ~> derivedColumn3",
+				"derivedColumn3 aggregate(groupBy(q),",
+				"     price = sum(price)) ~> qprice1",
+				"derivedColumn3 aggregate(groupBy(q),",
+				"     price = sum(price)) ~> qprice2",
+				"qprice2, qprice1 join(qprice2@q - qprice1@q ==1,",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"select2 derive(qgrate = ((ctotal-ptotal) / ptotal) *100,",
+				"          qstatus = iif(ctotal<ptotal, \"increased\",\r",
+				"  iif(ctotal == ptotal, \"equal\", \"decreased\"))) ~> derivedColumn4",
+				"join2 select(mapColumn(",
+				"          qcs = qprice2@q,",
+				"          ctotal = qprice2@price,",
+				"          qps = qprice1@q,",
+				"          ptotal = qprice1@price",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"derivedColumn2 sort(asc(cm, true),",
+				"     asc(pm, true)) ~> sort1",
+				"derivedColumn4 sort(desc(qcs, true)) ~> sort2",
+				"sort2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['quaterlySalesReport'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1",
+				"sort1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['monthlySalesReport'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink2"
+			]
+		}
+	}
+}

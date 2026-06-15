@@ -1,0 +1,130 @@
+{
+	"name": "dataflow1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_demo1",
+						"type": "DatasetReference"
+					},
+					"name": "demo1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_demo2",
+						"type": "DatasetReference"
+					},
+					"name": "demo2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_backups",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_backups",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_backups",
+						"type": "DatasetReference"
+					},
+					"name": "sink3"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_backups",
+						"type": "DatasetReference"
+					},
+					"name": "sink4"
+				}
+			],
+			"transformations": [
+				{
+					"name": "common"
+				},
+				{
+					"name": "onlydemo1"
+				},
+				{
+					"name": "union1"
+				},
+				{
+					"name": "onlydemo2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          name as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> demo1",
+				"source(output(",
+				"          id as string,",
+				"          name as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> demo2",
+				"demo1, demo2 exists(demo1@id == demo2@id,",
+				"     negate:false,",
+				"     broadcast: 'auto')~> common",
+				"demo1, demo2 exists(demo1@id == demo2@id,",
+				"     negate:true,",
+				"     broadcast: 'auto')~> onlydemo1",
+				"onlydemo1, onlydemo2 union(byName: true)~> union1",
+				"demo2, demo1 exists(demo2@id == demo1@id,",
+				"     negate:true,",
+				"     broadcast: 'auto')~> onlydemo2",
+				"union1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['irregular'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1",
+				"onlydemo1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['onlydemo1'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink2",
+				"common sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['common'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink3",
+				"onlydemo2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['onlydemo2'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink4"
+			]
+		}
+	}
+}

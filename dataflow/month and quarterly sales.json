@@ -1,0 +1,145 @@
+{
+	"name": "month and quarterly sales",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_sales",
+						"type": "DatasetReference"
+					},
+					"name": "sales"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_target",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_target",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "monthlysales1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "qsales"
+				},
+				{
+					"name": "monthlysales2"
+				},
+				{
+					"name": "join1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "derivedColumn3"
+				},
+				{
+					"name": "qsales2"
+				},
+				{
+					"name": "join2"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "derivedColumn4"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          dos as integer,",
+				"          Price as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> sales",
+				"sales derive(month = substring(toString(dos), 5, 2)) ~> derivedColumn1",
+				"derivedColumn1 aggregate(groupBy(month),",
+				"     Price = sum(Price)) ~> monthlysales1",
+				"monthlysales1 derive(q = case(\r",
+				"    toInteger(month) < 4, 1,\r",
+				"    toInteger(month) < 7, 2,\r",
+				"    toInteger(month) < 10, 3,\r",
+				"    4\r",
+				")) ~> derivedColumn2",
+				"derivedColumn2 aggregate(groupBy(q),",
+				"     Price = sum(Price)) ~> qsales",
+				"derivedColumn1 aggregate(groupBy(month),",
+				"     Price = sum(Price)) ~> monthlysales2",
+				"monthlysales2, monthlysales1 join(toInteger(monthlysales2@month) - toInteger(monthlysales1@month) == 1,",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 select(mapColumn(",
+				"          cm = monthlysales2@month,",
+				"          ctot = monthlysales2@Price,",
+				"          pm = monthlysales1@month,",
+				"          ptot = monthlysales1@Price",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 derive(gstatus = toInteger(((ctot-ptot)/ptot)*100),",
+				"          incrementalstatus = iif(ctot> ptot, \"incremented\",\r",
+				"     iif(ctot == ptot, \"nochnage\", \"Decreased\"))) ~> derivedColumn3",
+				"derivedColumn2 aggregate(groupBy(q),",
+				"     qtotal = sum(Price)) ~> qsales2",
+				"qsales2, qsales join(qsales2@q-qsales@q == 1,",
+				"     joinType:'cross',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2",
+				"join2 select(mapColumn(",
+				"          cq = qsales2@q,",
+				"          cqtotal = qtotal,",
+				"          pq = qsales@q,",
+				"          pqtotal = Price",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 derive(qgrate = toInteger((cq-pq)/pq*100),",
+				"          gstatus = case(cqtotal >pqtotal, \"Increased\",\r",
+				"    cqtotal==pqtotal , \"Equal\", \"Decreased\")) ~> derivedColumn4",
+				"derivedColumn3 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['monthly comparision'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1",
+				"derivedColumn4 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['Quaterly comaparision'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink2"
+			]
+		}
+	}
+}

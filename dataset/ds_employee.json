@@ -1,0 +1,49 @@
+{
+	"name": "ds_employee",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_kumar1001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "emplotyee.text",
+				"fileSystem": "mydata"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "name",
+				"type": "String"
+			},
+			{
+				"name": "sal",
+				"type": "String"
+			},
+			{
+				"name": "gend",
+				"type": "String"
+			},
+			{
+				"name": "dno",
+				"type": "String"
+			},
+			{
+				"name": "city",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
