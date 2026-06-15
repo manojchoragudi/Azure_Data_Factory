@@ -1,0 +1,34 @@
+{
+	"name": "ds_etab",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sqlserver1001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "trids",
+				"type": "char"
+			},
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "name",
+				"type": "char"
+			},
+			{
+				"name": "city",
+				"type": "char"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "etab"
+		}
+	}
+}
