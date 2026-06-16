@@ -323,7 +323,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Rankflow1",
+						"name": "windowDF",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
@@ -336,11 +336,11 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "Rankflow1",
+								"referenceName": "windowDF",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"source3": {},
+									"source1": {},
 									"sink1": {}
 								}
 							},
@@ -359,7 +359,7 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/Rankflow1')]"
+				"[concat(variables('factoryId'), '/dataflows/windowDF')]"
 			]
 		},
 		{
@@ -2563,10 +2563,14 @@
 						"     ignoreNoFilesFound: false) ~> source1",
 						"source1 window(over(dno),",
 						"     desc(sal, true),",
-						"     commulativeAvg = avg(sal)) ~> window1",
+						"     cmax = max(sal),",
+						"          cmin = min(sal),",
+						"          commulativeAvg = avg(sal),",
+						"          csum = sum(sal),",
+						"          crank = denseRank()) ~> window1",
 						"window1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     partitionFileNames:['windowAverage'],",
+						"     partitionFileNames:['windowoutput'],",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",

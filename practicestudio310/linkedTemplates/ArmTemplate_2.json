@@ -107,7 +107,7 @@
 			"properties": {
 				"activities": [
 					{
-						"name": "Rankflow1",
+						"name": "windowDF",
 						"type": "ExecuteDataFlow",
 						"dependsOn": [],
 						"policy": {
@@ -120,11 +120,11 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataflow": {
-								"referenceName": "Rankflow1",
+								"referenceName": "windowDF",
 								"type": "DataFlowReference",
 								"parameters": {},
 								"datasetParameters": {
-									"source3": {},
+									"source1": {},
 									"sink1": {}
 								}
 							},
