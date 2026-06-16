@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "jasonclean",
+						"referenceName": "ds_backups",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -114,7 +114,7 @@
 				"     skipDuplicateMapOutputs: true) ~> select2",
 				"select2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:['jasoncleaned2'],",
+				"     partitionFileNames:['jasoncleaned4'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
