@@ -1,0 +1,91 @@
+{
+	"name": "jasonfile",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_jasonfile",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_backups",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "parse1"
+				},
+				{
+					"name": "flatten1"
+				},
+				{
+					"name": "flatten2"
+				},
+				{
+					"name": "parse2"
+				},
+				{
+					"name": "parse3"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          jason_data as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source1 parse(hlevel = jason_data ?  (id as integer, name as string, qual as string[], married as integer, kids as string[] ),",
+				"     format: 'json',",
+				"     documentForm: 'singleDocument') ~> parse1",
+				"parse1 foldDown(unroll(hlevel.qual),",
+				"     mapColumn(",
+				"          id = hlevel.id,",
+				"          name = hlevel.name,",
+				"          qual = hlevel.qual,",
+				"          married = hlevel.married,",
+				"          kids = hlevel.kids",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten1",
+				"flatten1 foldDown(unroll(kids),",
+				"     mapColumn(",
+				"          id,",
+				"          name,",
+				"          qual,",
+				"          married,",
+				"          kids",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten2",
+				"flatten2 parse(flname = name ? (fname as string,",
+				"          lname as string),",
+				"     format: 'json',",
+				"     documentForm: 'singleDocument') ~> parse2",
+				"parse2 parse(kinfo = kids ? (name as string, age as integer, gend as string) ,",
+				"     format: 'json',",
+				"     documentForm: 'documentPerLine') ~> parse3",
+				"parse3 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['jasoncleaned'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

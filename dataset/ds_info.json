@@ -13,7 +13,7 @@
 				"fileName": "info.txt",
 				"fileSystem": "mydata"
 			},
-			"columnDelimiter": ",",
+			"columnDelimiter": "\t",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
