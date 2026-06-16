@@ -36,6 +36,12 @@
 				},
 				{
 					"name": "select1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select2"
 				}
 			],
 			"scriptLines": [
@@ -89,9 +95,26 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> select1",
-				"select1 sink(allowSchemaDrift: true,",
+				"select1 derive(fname = flname.fname,",
+				"          lname = flname.lname,",
+				"          kidname = kidsinfo.name,",
+				"          kidage = kidsinfo.age,",
+				"          kidgend = kidsinfo.gend) ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          id,",
+				"          fname,",
+				"          lname,",
+				"          qual,",
+				"          married,",
+				"          kidname,",
+				"          kidage,",
+				"          kidgend",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     partitionFileNames:['jasoncleaned'],",
+				"     partitionFileNames:['jasoncleaned2'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
 				"     postCommands: [],",
