@@ -13,6 +13,31 @@
 	},
 	"resources": [
 		{
+			"name": "[concat(parameters('factoryName'), '/ds_target')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "ls_kumar1001",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "target"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": []
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/ds_trans')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -580,7 +605,9 @@
 					]
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_target')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/crossjoin')]",
@@ -867,7 +894,8 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_trans')]"
+				"[concat(variables('factoryId'), '/datasets/ds_trans')]",
+				"[concat(variables('factoryId'), '/datasets/ds_target')]"
 			]
 		},
 		{
@@ -1016,7 +1044,9 @@
 					]
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_target')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/pivot')]",
@@ -1145,7 +1175,9 @@
 					]
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_target')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/sales')]",
@@ -1220,7 +1252,9 @@
 					]
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_target')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/sorrowgatewkey')]",
@@ -1334,6 +1368,15 @@
 					"transformations": [
 						{
 							"name": "window1"
+						},
+						{
+							"name": "surrogateKey1"
+						},
+						{
+							"name": "sort1"
+						},
+						{
+							"name": "derivedColumn1"
 						}
 					],
 					"scriptLines": [
@@ -1348,16 +1391,16 @@
 						"     allowSchemaDrift: true,",
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false) ~> source1",
-						"source1 window(over(dno),",
-						"     desc(sal, true),",
-						"     cmax = max(sal),",
-						"          cmin = min(sal),",
-						"          commulativeAvg = avg(sal),",
-						"          csum = sum(sal),",
-						"          crank = denseRank()) ~> window1",
+						"derivedColumn1 window(over(sal),",
+						"     cavg = avg(skey)) ~> window1",
+						"sort1 keyGenerate(output(skey as long),",
+						"     startAt: 1L,",
+						"     stepValue: 1L) ~> surrogateKey1",
+						"source1 sort(desc(sal, true)) ~> sort1",
+						"surrogateKey1 derive(rsal = 200000 - sal) ~> derivedColumn1",
 						"window1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
-						"     partitionFileNames:['windowoutput'],",
+						"     partitionFileNames:['windowoverall'],",
 						"     umask: 0022,",
 						"     preCommands: [],",
 						"     postCommands: [],",
@@ -1567,53 +1610,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/dataflows/month and quarterly sales')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/practiceSalesReport')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "sorrowgatewkey",
-						"type": "ExecuteDataFlow",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataflow": {
-								"referenceName": "sorrowgatewkey",
-								"type": "DataFlowReference",
-								"parameters": {},
-								"datasetParameters": {
-									"source1": {},
-									"sink1": {}
-								}
-							},
-							"staging": {},
-							"compute": {
-								"coreCount": 8,
-								"computeType": "General"
-							},
-							"traceLevel": "Fine"
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {}
-				},
-				"annotations": [],
-				"lastPublishTime": "2026-06-15T07:10:13Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/dataflows/sorrowgatewkey')]"
 			]
 		}
 	]
