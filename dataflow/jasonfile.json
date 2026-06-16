@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_backups",
+						"referenceName": "jasonclean",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -35,7 +35,7 @@
 					"name": "parse2"
 				},
 				{
-					"name": "parse3"
+					"name": "select1"
 				}
 			],
 			"scriptLines": [
@@ -46,7 +46,11 @@
 				"     validateSchema: false,",
 				"     isolationLevel: 'READ_UNCOMMITTED',",
 				"     format: 'table') ~> source1",
-				"source1 parse(hlevel = jason_data ?  (id as integer, name as string, qual as string[], married as integer, kids as string[] ),",
+				"source1 parse(hlevel = jason_data ? (id as integer,",
+				"          name as string,",
+				"          qual as string[],",
+				"          married as integer,",
+				"          kids as string[]),",
 				"     format: 'json',",
 				"     documentForm: 'singleDocument') ~> parse1",
 				"parse1 foldDown(unroll(hlevel.qual),",
@@ -71,12 +75,21 @@
 				"     skipDuplicateMapOutputs: false) ~> flatten2",
 				"flatten2 parse(flname = name ? (fname as string,",
 				"          lname as string),",
+				"          kidsinfo = kids ? (name as string,",
+				"          age as integer,",
+				"          gend as string),",
 				"     format: 'json',",
 				"     documentForm: 'singleDocument') ~> parse2",
-				"parse2 parse(kinfo = kids ? (name as string, age as integer, gend as string) ,",
-				"     format: 'json',",
-				"     documentForm: 'documentPerLine') ~> parse3",
-				"parse3 sink(allowSchemaDrift: true,",
+				"parse2 select(mapColumn(",
+				"          id,",
+				"          flname,",
+				"          qual,",
+				"          married,",
+				"          kidsinfo",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['jasoncleaned'],",
 				"     umask: 0022,",
