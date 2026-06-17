@@ -1,0 +1,133 @@
+{
+	"name": "jasonparctice",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_jasonfile",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_backups",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "parse1"
+				},
+				{
+					"name": "flatten2"
+				},
+				{
+					"name": "flatten3"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "parse2"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "select2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          jason_data as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> source1",
+				"source1 parse(fullclean = jason_data ? (id as integer,",
+				"          name as string,",
+				"          qual as string[],",
+				"          age as integer,",
+				"          married as integer,",
+				"          kids as string[]),",
+				"     format: 'json',",
+				"     documentForm: 'singleDocument') ~> parse1",
+				"parse1 foldDown(unroll(fullclean.qual),",
+				"     mapColumn(",
+				"          id = fullclean.id,",
+				"          name = fullclean.name,",
+				"          qual = fullclean.qual,",
+				"          age = fullclean.age,",
+				"          married = fullclean.married,",
+				"          kids = fullclean.kids",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten2",
+				"flatten2 foldDown(unroll(kids),",
+				"     mapColumn(",
+				"          name,",
+				"          id,",
+				"          qual,",
+				"          age,",
+				"          married,",
+				"          kids = kids",
+				"     ),",
+				"     skipDuplicateMapInputs: false,",
+				"     skipDuplicateMapOutputs: false) ~> flatten3",
+				"select1 derive(fname = fname.fname,",
+				"          lname = fname.lname,",
+				"          kidname = kiddata.name,",
+				"          kidage = kiddata.age,",
+				"          kidgend = kiddata.gend) ~> derivedColumn1",
+				"flatten3 parse(fname = name ? (fname as string,",
+				"          lname as string),",
+				"          kiddata = kids ? (name as string,",
+				"          age as integer,",
+				"          gend as string),",
+				"     format: 'json',",
+				"     documentForm: 'singleDocument') ~> parse2",
+				"parse2 select(mapColumn(",
+				"          id,",
+				"          fname = fname,",
+				"          fname,",
+				"          qual,",
+				"          age,",
+				"          kiddata,",
+				"          married",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"derivedColumn1 select(mapColumn(",
+				"          id,",
+				"          fname,",
+				"          lname,",
+				"          qual,",
+				"          age,",
+				"          married,",
+				"          kidname,",
+				"          kidage,",
+				"          kidgend",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['jasonpractice1'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}
