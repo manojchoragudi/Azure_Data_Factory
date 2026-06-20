@@ -1,5 +1,5 @@
 {
-	"name": "ds_infoTab",
+	"name": "ds_combined",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sqlserver1001",
@@ -9,18 +9,28 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "id",
+				"name": "SourceTable",
+				"type": "varchar"
+			},
+			{
+				"name": "Id",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "name",
+				"name": "Name",
 				"type": "varchar"
+			},
+			{
+				"name": "LastModifyTime",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "infotab"
+			"table": "combined_data"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

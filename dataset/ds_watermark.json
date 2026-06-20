@@ -1,5 +1,5 @@
 {
-	"name": "ds_infoTab",
+	"name": "ds_watermark",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sqlserver1001",
@@ -9,18 +9,19 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "id",
-				"type": "int",
-				"precision": 10
+				"name": "tablename",
+				"type": "varchar"
 			},
 			{
-				"name": "name",
-				"type": "varchar"
+				"name": "watermarkvalue",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "infotab"
+			"table": "watermarktable"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

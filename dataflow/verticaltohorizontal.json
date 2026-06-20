@@ -1,0 +1,91 @@
+{
+	"name": "verticaltohorizontal",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Json1",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_backups",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "stringify1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          name as string,",
+				"          age as integer,",
+				"          married as integer,",
+				"          qual as string[],",
+				"          address as (city as string, country as string),",
+				"          gend as string,",
+				"          kids as (name as string, gend as string, age as integer)[]",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     documentForm: 'arrayOfDocuments') ~> source1",
+				"source1 stringify(newaddress = address ? string,",
+				"          newkids = kids ? string,",
+				"     format: 'json') ~> stringify1",
+				"stringify1 select(mapColumn(",
+				"          name,",
+				"          age,",
+				"          married,",
+				"          qual,",
+				"          gend,",
+				"          newaddress,",
+				"          newkids",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 derive(addressnew = toString(newaddress),",
+				"          kidsnew = toString(newkids)) ~> derivedColumn1",
+				"derivedColumn1 select(mapColumn(",
+				"          name,",
+				"          age,",
+				"          married,",
+				"          qual,",
+				"          gend,",
+				"          addressnew,",
+				"          kidsnew",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['jsonhorizontal'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

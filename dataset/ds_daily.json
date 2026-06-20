@@ -1,5 +1,5 @@
 {
-	"name": "ds_info",
+	"name": "ds_daily",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_kumar1001",
@@ -10,32 +10,18 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "info.txt",
-				"fileSystem": "mydata"
+				"fileName": {
+					"value": "@concat\n(item().tablename, '_', pipeline().RunId)",
+					"type": "Expression"
+				},
+				"fileSystem": "daily"
 			},
-			"columnDelimiter": "\t",
+			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
-		"schema": [
-			{
-				"name": "id",
-				"type": "String"
-			},
-			{
-				"name": "name",
-				"type": "String"
-			},
-			{
-				"name": "address",
-				"type": "String"
-			},
-			{
-				"name": "university",
-				"type": "String"
-			}
-		]
+		"schema": []
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }

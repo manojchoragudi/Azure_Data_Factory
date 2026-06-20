@@ -1,5 +1,5 @@
 {
-	"name": "ds_infoTab",
+	"name": "ds_tab1",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sqlserver1001",
@@ -16,11 +16,17 @@
 			{
 				"name": "name",
 				"type": "varchar"
+			},
+			{
+				"name": "lastModifyTime",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "infotab"
+			"table": "tab1"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

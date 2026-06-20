@@ -1,5 +1,5 @@
 {
-	"name": "ds_info",
+	"name": "ds_newtrans",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_kumar1001",
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "info.txt",
+				"fileName": "newtrans.txt",
 				"fileSystem": "mydata"
 			},
 			"columnDelimiter": "\t",
@@ -20,19 +20,7 @@
 		},
 		"schema": [
 			{
-				"name": "id",
-				"type": "String"
-			},
-			{
-				"name": "name",
-				"type": "String"
-			},
-			{
-				"name": "address",
-				"type": "String"
-			},
-			{
-				"name": "university",
+				"name": "id,name,sal,gend,dno,city",
 				"type": "String"
 			}
 		]

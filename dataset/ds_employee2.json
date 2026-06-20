@@ -1,5 +1,5 @@
 {
-	"name": "ds_info",
+	"name": "ds_employee2",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_kumar1001",
@@ -10,10 +10,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "info.txt",
+				"fileName": "employee2.txt",
 				"fileSystem": "mydata"
 			},
-			"columnDelimiter": "\t",
+			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
@@ -28,11 +28,19 @@
 				"type": "String"
 			},
 			{
-				"name": "address",
+				"name": "sal",
 				"type": "String"
 			},
 			{
-				"name": "university",
+				"name": "gend",
+				"type": "String"
+			},
+			{
+				"name": "dno",
+				"type": "String"
+			},
+			{
+				"name": "city",
 				"type": "String"
 			}
 		]
