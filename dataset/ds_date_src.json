@@ -1,0 +1,33 @@
+{
+	"name": "ds_date_src",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sqlserver1001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "id",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "name",
+				"type": "varchar"
+			},
+			{
+				"name": "lastModifyTime",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "date_src"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

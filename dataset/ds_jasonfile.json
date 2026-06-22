@@ -1,0 +1,22 @@
+{
+	"name": "ds_jasonfile",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_sqlserver1001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "jason_data",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "jasonfile"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

@@ -1,0 +1,19 @@
+{
+	"name": "jasonclean",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_kumar1001",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileSystem": "backups"
+			}
+		},
+		"schema": {}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
