@@ -1,5 +1,5 @@
 {
-	"name": "ds_emp1",
+	"name": "ds_empdata",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sqlserver1001",
@@ -14,15 +14,7 @@
 				"precision": 10
 			},
 			{
-				"name": "fname",
-				"type": "varchar"
-			},
-			{
-				"name": "lname",
-				"type": "varchar"
-			},
-			{
-				"name": "country",
+				"name": "name",
 				"type": "varchar"
 			},
 			{
@@ -31,21 +23,22 @@
 				"precision": 10
 			},
 			{
+				"name": "gend",
+				"type": "varchar"
+			},
+			{
 				"name": "dno",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "lastModifyTime",
-				"type": "datetime",
-				"precision": 23,
-				"scale": 3
+				"name": "city",
+				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "emp"
+			"table": "empdata"
 		}
-	},
-	"type": "Microsoft.DataFactory/factories/datasets"
+	}
 }

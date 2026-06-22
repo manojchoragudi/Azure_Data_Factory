@@ -1,0 +1,108 @@
+{
+	"name": "unmatched_columns",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_employee2",
+						"type": "DatasetReference"
+					},
+					"name": "e1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_delta1",
+						"type": "DatasetReference"
+					},
+					"name": "e2"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_delta2",
+						"type": "DatasetReference"
+					},
+					"name": "e3"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds1_d3",
+						"type": "DatasetReference"
+					},
+					"name": "d3"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "union1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "union2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          name as string,",
+				"          sal as string,",
+				"          gend as string,",
+				"          dno as string,",
+				"          city as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> e1",
+				"source(output(",
+				"          id as string,",
+				"          name as string,",
+				"          sal as string,",
+				"          gend as string,",
+				"          dno as string,",
+				"          city as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> e2",
+				"source(output(",
+				"          id as short,",
+				"          name as string,",
+				"          sal as integer,",
+				"          gend as string,",
+				"          dno as string,",
+				"          city as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> e3",
+				"source(output(",
+				"          did as string,",
+				"          dname as string,",
+				"          dsal as string,",
+				"          dgend as string,",
+				"          ddno as string,",
+				"          dcity as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> d3",
+				"e1, e2, e3 union(byName: true)~> union1",
+				"d3 select(mapColumn(",
+				"          id = did,",
+				"          name = dname,",
+				"          sal = dsal,",
+				"          gend = dgend,",
+				"          dno = ddno,",
+				"          city = dcity",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"union1, select1 union(byName: true)~> union2"
+			]
+		}
+	}
+}
