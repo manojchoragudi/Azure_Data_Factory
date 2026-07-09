@@ -1,5 +1,5 @@
 {
-	"name": "ds_trans",
+	"name": "ds_newemp",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_myfactory",
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "trans.txt",
+				"fileName": "newemp.txt",
 				"fileSystem": "mydata"
 			},
 			"columnDelimiter": ",",
@@ -20,7 +20,23 @@
 		},
 		"schema": [
 			{
-				"name": "pid,cid,price,ts",
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": " name",
+				"type": "String"
+			},
+			{
+				"name": " salary",
+				"type": "String"
+			},
+			{
+				"name": " dno",
+				"type": "String"
+			},
+			{
+				"name": " gen",
 				"type": "String"
 			}
 		]

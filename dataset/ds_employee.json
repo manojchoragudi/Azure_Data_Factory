@@ -2,7 +2,7 @@
 	"name": "ds_employee",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_kumar1001",
+			"referenceName": "ls_myfactory",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "emplotyee.text",
+				"fileName": "employee2.txt",
 				"fileSystem": "mydata"
 			},
 			"columnDelimiter": ",",

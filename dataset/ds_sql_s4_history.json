@@ -1,5 +1,5 @@
 {
-	"name": "ds_infoTab",
+	"name": "ds_sql_s4_history",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sqlserver",
@@ -8,6 +8,11 @@
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
+			{
+				"name": "skey",
+				"type": "int",
+				"precision": 10
+			},
 			{
 				"name": "id",
 				"type": "int",
@@ -18,31 +23,13 @@
 				"type": "varchar"
 			},
 			{
-				"name": "sal",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "gend",
-				"type": "varchar"
-			},
-			{
-				"name": "dno",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "dname",
-				"type": "varchar"
-			},
-			{
-				"name": "dlocation",
+				"name": "city",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "infotab"
+			"table": "s4history"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

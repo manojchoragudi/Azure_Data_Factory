@@ -1,5 +1,5 @@
 {
-	"name": "ds_infoTab",
+	"name": "ds_sql_s4",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sqlserver",
@@ -18,31 +18,13 @@
 				"type": "varchar"
 			},
 			{
-				"name": "sal",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "gend",
-				"type": "varchar"
-			},
-			{
-				"name": "dno",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "dname",
-				"type": "varchar"
-			},
-			{
-				"name": "dlocation",
+				"name": "city",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "infotab"
+			"table": "s4tab"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

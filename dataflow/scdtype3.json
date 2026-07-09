@@ -1,0 +1,118 @@
+{
+	"name": "scdtype3",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_deltascd3",
+						"type": "DatasetReference"
+					},
+					"name": "deltatab"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_s3tab",
+						"type": "DatasetReference"
+					},
+					"name": "s3tab"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_s3tab",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "lookup1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "alterRow1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as integer,",
+				"          name as string,",
+				"          city as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> deltatab",
+				"source(output(",
+				"          id as integer,",
+				"          name as string,",
+				"          pcity as string,",
+				"          city as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> s3tab",
+				"deltatab, s3tab lookup(deltatab@id == s3tab@id,",
+				"     multiple: true,",
+				"     broadcast: 'auto')~> lookup1",
+				"lookup1 select(mapColumn(",
+				"          id = deltatab@id,",
+				"          name = deltatab@name,",
+				"          city = deltatab@city,",
+				"          id1 = s3tab@id,",
+				"          name1 = s3tab@name,",
+				"          pcity1 = pcity,",
+				"          city1 = s3tab@city",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 derive(pcity1 = city1,",
+				"          city1 = city) ~> derivedColumn1",
+				"derivedColumn2 select(mapColumn(",
+				"          id = id1,",
+				"          name = name1,",
+				"          pcity = pcity1,",
+				"          city = city1",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"derivedColumn1 derive(id1 = id,",
+				"          name1 = name,",
+				"          city1 = city) ~> derivedColumn2",
+				"select2 alterRow(upsertIf(1==1)) ~> alterRow1",
+				"alterRow1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id as integer,",
+				"          name as string,",
+				"          pcity as string,",
+				"          city as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:false,",
+				"     upsertable:true,",
+				"     keys:['id'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+			]
+		}
+	}
+}

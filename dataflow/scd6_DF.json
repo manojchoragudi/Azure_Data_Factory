@@ -1,0 +1,199 @@
+{
+	"name": "scd6_DF",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_delta_s6",
+						"type": "DatasetReference"
+					},
+					"name": "deltaScd6"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sql_s6tab",
+						"type": "DatasetReference"
+					},
+					"name": "s6tab"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_s6tab",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sql_s6tab",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "filter2"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "lookup1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "alterRow1"
+				},
+				{
+					"name": "lookup2"
+				},
+				{
+					"name": "select3"
+				},
+				{
+					"name": "derivedColumn3"
+				},
+				{
+					"name": "filter3"
+				},
+				{
+					"name": "alterRow2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as integer,",
+				"          name as string,",
+				"          city as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> deltaScd6",
+				"source(output(",
+				"          skey as integer,",
+				"          id as integer,",
+				"          name as string,",
+				"          pcity as string,",
+				"          city as string,",
+				"          activestatus as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> s6tab",
+				"s6tab filter(activestatus == 1) ~> filter2",
+				"deltaScd6 derive(activestatus = 1) ~> derivedColumn1",
+				"derivedColumn1, filter2 lookup(deltaScd6@id == s6tab@id,",
+				"     multiple: true,",
+				"     broadcast: 'auto')~> lookup1",
+				"lookup1 select(mapColumn(",
+				"          id = deltaScd6@id,",
+				"          name = deltaScd6@name,",
+				"          city = deltaScd6@city,",
+				"          activestatus = derivedColumn1@activestatus,",
+				"          skey,",
+				"          id1 = s6tab@id,",
+				"          name1 = s6tab@name,",
+				"          pcity,",
+				"          city1 = s6tab@city,",
+				"          activestatus1 = s6tab@activestatus",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 derive(pcity = city1) ~> derivedColumn2",
+				"derivedColumn2 select(mapColumn(",
+				"          id,",
+				"          name,",
+				"          city,",
+				"          pcity,",
+				"          activestatus",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"select2 alterRow(insertIf(1==1)) ~> alterRow1",
+				"deltaScd6, s6tab lookup(deltaScd6@id == s6tab@id,",
+				"     multiple: true,",
+				"     broadcast: 'auto')~> lookup2",
+				"lookup2 select(mapColumn(",
+				"          skey,",
+				"          id = s6tab@id,",
+				"          name = s6tab@name,",
+				"          pcity,",
+				"          city = s6tab@city,",
+				"          activestatus",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select3",
+				"filter3 derive(activestatus = activestatus -1) ~> derivedColumn3",
+				"select3 filter(!isNull(id)) ~> filter3",
+				"derivedColumn3 alterRow(updateIf(1==1)) ~> alterRow2",
+				"alterRow1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          skey as integer,",
+				"          id as integer,",
+				"          name as string,",
+				"          pcity as string,",
+				"          city as string,",
+				"          activestatus as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 2,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          id,",
+				"          name,",
+				"          pcity,",
+				"          city,",
+				"          activestatus",
+				"     )) ~> sink1",
+				"alterRow2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          skey as integer,",
+				"          id as integer,",
+				"          name as string,",
+				"          pcity as string,",
+				"          city as string,",
+				"          activestatus as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:true,",
+				"     upsertable:false,",
+				"     keys:['id'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          id,",
+				"          name,",
+				"          pcity,",
+				"          city,",
+				"          activestatus",
+				"     )) ~> sink2"
+			]
+		}
+	}
+}

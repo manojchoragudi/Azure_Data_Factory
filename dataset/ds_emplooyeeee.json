@@ -1,5 +1,5 @@
 {
-	"name": "ds_infoTab",
+	"name": "ds_emplooyeeee",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sqlserver",
@@ -32,17 +32,13 @@
 				"precision": 10
 			},
 			{
-				"name": "dname",
-				"type": "varchar"
-			},
-			{
-				"name": "dlocation",
+				"name": "city",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "infotab"
+			"table": "employees"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

@@ -1,12 +1,12 @@
 {
-	"name": "dataflow1",
+	"name": "var_to_uniqueDF",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
 			"sources": [
 				{
 					"dataset": {
-						"referenceName": "ds_employee",
+						"referenceName": "ds_profile",
 						"type": "DatasetReference"
 					},
 					"name": "source1"
@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_emplooyeeee",
+						"referenceName": "ds_staging",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -23,41 +23,41 @@
 			],
 			"transformations": [
 				{
-					"name": "alterRow1"
+					"name": "filter1"
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     category as string",
+				"}",
 				"source(output(",
 				"          id as string,",
 				"          name as string,",
 				"          sal as string,",
 				"          gend as string,",
-				"          dno as integer,",
+				"          dno as string,",
 				"          city as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 alterRow(deleteIf(dno==11)) ~> alterRow1",
-				"alterRow1 sink(allowSchemaDrift: true,",
+				"source1 filter(city== $category) ~> filter1",
+				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     input(",
-				"          id as integer,",
+				"          id as string,",
 				"          name as string,",
-				"          sal as integer,",
+				"          sal as string,",
 				"          gend as string,",
-				"          dno as integer,",
-				"          city as string",
+				"          lastmodifytime as string",
 				"     ),",
-				"     deletable:true,",
-				"     insertable:false,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     keys:['id'],",
-				"     format: 'table',",
+				"     partitionFileNames:['unique_categories'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}

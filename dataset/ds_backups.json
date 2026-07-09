@@ -2,7 +2,7 @@
 	"name": "ds_backups",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_kumar1001",
+			"referenceName": "ls_myfactory",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -10,6 +10,10 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
+				"fileName": {
+					"value": "concat(item().tablename,'-', pipeline.RunId)",
+					"type": "Expression"
+				},
 				"fileSystem": "backups"
 			},
 			"columnDelimiter": ",",

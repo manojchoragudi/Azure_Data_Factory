@@ -1,5 +1,5 @@
 {
-	"name": "ds_emp1",
+	"name": "ds_watermarktable",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sqlserver",
@@ -9,33 +9,23 @@
 		"type": "AzureSqlTable",
 		"schema": [
 			{
-				"name": "id",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "name",
+				"name": "tablename",
 				"type": "varchar"
 			},
 			{
-				"name": "sal",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "gend",
-				"type": "varchar"
-			},
-			{
-				"name": "lastmodifytime",
+				"name": "watermarkvalue",
 				"type": "datetime",
 				"precision": 23,
 				"scale": 3
+			},
+			{
+				"name": "watermarkcol",
+				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "emp1"
+			"table": "watermarktable"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

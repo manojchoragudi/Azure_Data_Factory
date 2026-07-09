@@ -1,0 +1,144 @@
+{
+	"name": "transformationbysinglecache",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_infoTab",
+						"type": "DatasetReference"
+					},
+					"name": "infotab"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_dparts",
+						"type": "DatasetReference"
+					},
+					"name": "dparts"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_emp_data",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"name": "sink1"
+				},
+				{
+					"name": "sink2"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_infoTab",
+						"type": "DatasetReference"
+					},
+					"name": "sink3"
+				}
+			],
+			"transformations": [
+				{
+					"name": "aggregate1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "surrogateKey1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as integer,",
+				"          name as string,",
+				"          sal as integer,",
+				"          gend as string,",
+				"          dno as integer,",
+				"          dname as string,",
+				"          dlocation as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> infotab",
+				"source(output(",
+				"          dno as integer,",
+				"          dname as string,",
+				"          dlocation as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> dparts",
+				"source(output(",
+				"          ename as string,",
+				"          esal as string,",
+				"          egend as string,",
+				"          dno as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"infotab aggregate(maxid = max(id)) ~> aggregate1",
+				"surrogateKey1 derive(eid = sink1#outputs()[1].maxid + sno,",
+				"          dname = sink2#lookup(dno).dname,",
+				"          dlocation = sink2#lookup(dno).dlocation) ~> derivedColumn1",
+				"source1 keyGenerate(output(sno as long),",
+				"     startAt: 1L,",
+				"     stepValue: 1L) ~> surrogateKey1",
+				"aggregate1 sink(validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: false,",
+				"     saveOrder: 1) ~> sink1",
+				"dparts sink(validateSchema: false,",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     keys:['dno'],",
+				"     store: 'cache',",
+				"     format: 'inline',",
+				"     output: false,",
+				"     saveOrder: 1,",
+				"     mapColumn(",
+				"          dno,",
+				"          dname,",
+				"          dlocation",
+				"     )) ~> sink2",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id as integer,",
+				"          name as string,",
+				"          sal as integer,",
+				"          gend as string,",
+				"          dno as integer,",
+				"          dname as string,",
+				"          dlocation as string",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          id = eid,",
+				"          name = ename,",
+				"          sal = esal,",
+				"          gend = egend,",
+				"          dno,",
+				"          dname,",
+				"          dlocation",
+				"     )) ~> sink3"
+			]
+		}
+	}
+}

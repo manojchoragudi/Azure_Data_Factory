@@ -1,8 +1,8 @@
 {
-	"name": "ds_trans",
+	"name": "ds_staging",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_myfactory",
+			"referenceName": "ls_staging",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -10,8 +10,8 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "trans.txt",
-				"fileSystem": "mydata"
+				"folderPath": "emp1",
+				"fileSystem": "staging"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
@@ -20,7 +20,23 @@
 		},
 		"schema": [
 			{
-				"name": "pid,cid,price,ts",
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "name",
+				"type": "String"
+			},
+			{
+				"name": "sal",
+				"type": "String"
+			},
+			{
+				"name": "gend",
+				"type": "String"
+			},
+			{
+				"name": "lastmodifytime",
 				"type": "String"
 			}
 		]

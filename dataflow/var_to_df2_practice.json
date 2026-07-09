@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "var_to_df2_practice",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
@@ -15,7 +15,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "ds_emplooyeeee",
+						"referenceName": "ds_backups",
 						"type": "DatasetReference"
 					},
 					"name": "sink1"
@@ -23,41 +23,34 @@
 			],
 			"transformations": [
 				{
-					"name": "alterRow1"
+					"name": "filter1"
 				}
 			],
 			"scriptLines": [
+				"parameters{",
+				"     comparisonvalue as integer (0)",
+				"}",
 				"source(output(",
 				"          id as string,",
 				"          name as string,",
-				"          sal as string,",
+				"          sal as integer,",
 				"          gend as string,",
-				"          dno as integer,",
+				"          dno as string,",
 				"          city as string",
 				"     ),",
 				"     allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> source1",
-				"source1 alterRow(deleteIf(dno==11)) ~> alterRow1",
-				"alterRow1 sink(allowSchemaDrift: true,",
+				"source1 filter(sal >= $comparisonvalue) ~> filter1",
+				"filter1 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     input(",
-				"          id as integer,",
-				"          name as string,",
-				"          sal as integer,",
-				"          gend as string,",
-				"          dno as integer,",
-				"          city as string",
-				"     ),",
-				"     deletable:true,",
-				"     insertable:false,",
-				"     updateable:false,",
-				"     upsertable:false,",
-				"     keys:['id'],",
-				"     format: 'table',",
+				"     partitionFileNames:['DF1_to_var_to_DF2'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+				"     partitionBy('hash', 1)) ~> sink1"
 			]
 		}
 	}

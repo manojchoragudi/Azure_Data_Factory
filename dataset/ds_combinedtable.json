@@ -1,5 +1,5 @@
 {
-	"name": "ds_infoTab",
+	"name": "ds_combinedtable",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sqlserver",
@@ -18,31 +18,19 @@
 				"type": "varchar"
 			},
 			{
-				"name": "sal",
-				"type": "int",
-				"precision": 10
+				"name": "lastmodifytime",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			},
 			{
-				"name": "gend",
-				"type": "varchar"
-			},
-			{
-				"name": "dno",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "dname",
-				"type": "varchar"
-			},
-			{
-				"name": "dlocation",
+				"name": "sourcetable",
 				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "infotab"
+			"table": "combined_table"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

@@ -1,0 +1,167 @@
+{
+	"name": "scdFlow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_delta_pros",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sql_pros",
+						"type": "DatasetReference"
+					},
+					"name": "pros"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_sql_pros",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "ds_sql_pros",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				},
+				{
+					"name": "lookup1"
+				},
+				{
+					"name": "select2"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "derivedColumn2"
+				},
+				{
+					"name": "alterRow1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          id as integer,",
+				"          name as string,",
+				"          salary as integer,",
+				"          company as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source(output(",
+				"          skey as integer,",
+				"          id as integer,",
+				"          name as string,",
+				"          salary as integer,",
+				"          company as string,",
+				"          status as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> pros",
+				"source1 derive(status = 1) ~> derivedColumn1",
+				"pros select(mapColumn(",
+				"          skey1 = skey,",
+				"          id1 = id,",
+				"          name1 = name,",
+				"          salary1 = salary,",
+				"          company1 = company,",
+				"          status1 = status",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"source1, select1 lookup(id == id1,",
+				"     multiple: true,",
+				"     broadcast: 'auto')~> lookup1",
+				"filter1 select(mapColumn(",
+				"          skey = skey1,",
+				"          id = id1,",
+				"          name = name1,",
+				"          salary = salary1,",
+				"          company = company1,",
+				"          status = status1",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select2",
+				"lookup1 filter(!isNull(id1)) ~> filter1",
+				"select2 derive(status = 0) ~> derivedColumn2",
+				"derivedColumn2 alterRow(updateIf(1==1)) ~> alterRow1",
+				"derivedColumn1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          skey as integer,",
+				"          id as integer,",
+				"          name as string,",
+				"          salary as integer,",
+				"          company as string,",
+				"          status as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:true,",
+				"     updateable:false,",
+				"     upsertable:false,",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 2,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          id,",
+				"          name,",
+				"          salary,",
+				"          company,",
+				"          status",
+				"     )) ~> sink1",
+				"alterRow1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          skey as integer,",
+				"          id as integer,",
+				"          name as string,",
+				"          salary as integer,",
+				"          company as string,",
+				"          status as integer",
+				"     ),",
+				"     deletable:false,",
+				"     insertable:false,",
+				"     updateable:true,",
+				"     upsertable:false,",
+				"     keys:['skey'],",
+				"     format: 'table',",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
+				"     errorHandlingOption: 'stopOnFirstError',",
+				"     mapColumn(",
+				"          skey,",
+				"          id,",
+				"          name,",
+				"          salary,",
+				"          company,",
+				"          status",
+				"     )) ~> sink2"
+			]
+		}
+	}
+}

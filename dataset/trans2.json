@@ -1,5 +1,5 @@
 {
-	"name": "ds_trans",
+	"name": "trans2",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_myfactory",
@@ -13,14 +13,26 @@
 				"fileName": "trans.txt",
 				"fileSystem": "mydata"
 			},
-			"columnDelimiter": ",",
+			"columnDelimiter": "\t",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
 			"quoteChar": "\""
 		},
 		"schema": [
 			{
-				"name": "pid,cid,price,ts",
+				"name": "pid",
+				"type": "String"
+			},
+			{
+				"name": "cid",
+				"type": "String"
+			},
+			{
+				"name": "price",
+				"type": "String"
+			},
+			{
+				"name": "ts",
 				"type": "String"
 			}
 		]

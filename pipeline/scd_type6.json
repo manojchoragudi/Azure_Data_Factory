@@ -1,9 +1,9 @@
 {
-	"name": "runflows",
+	"name": "scd_type6",
 	"properties": {
 		"activities": [
 			{
-				"name": "Data flow1",
+				"name": "scd6_DF",
 				"type": "ExecuteDataFlow",
 				"dependsOn": [],
 				"policy": {
@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataflow": {
-						"referenceName": "transformationbysinglecache",
+						"referenceName": "scd6_DF",
 						"type": "DataFlowReference"
 					},
 					"compute": {
@@ -28,7 +28,7 @@
 			}
 		],
 		"annotations": [],
-		"lastPublishTime": "2026-07-04T07:29:17Z"
+		"lastPublishTime": "2026-07-08T07:46:59Z"
 	},
 	"type": "Microsoft.DataFactory/factories/pipelines"
 }

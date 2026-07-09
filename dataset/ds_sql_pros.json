@@ -1,5 +1,5 @@
 {
-	"name": "ds_infoTab",
+	"name": "ds_sql_pros",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sqlserver",
@@ -8,6 +8,11 @@
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
+			{
+				"name": "skey",
+				"type": "int",
+				"precision": 10
+			},
 			{
 				"name": "id",
 				"type": "int",
@@ -18,31 +23,23 @@
 				"type": "varchar"
 			},
 			{
-				"name": "sal",
+				"name": "salary",
 				"type": "int",
 				"precision": 10
 			},
 			{
-				"name": "gend",
+				"name": "company",
 				"type": "varchar"
 			},
 			{
-				"name": "dno",
+				"name": "status",
 				"type": "int",
 				"precision": 10
-			},
-			{
-				"name": "dname",
-				"type": "varchar"
-			},
-			{
-				"name": "dlocation",
-				"type": "varchar"
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "infotab"
+			"table": "pros"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

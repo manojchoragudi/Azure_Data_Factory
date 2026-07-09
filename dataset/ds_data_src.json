@@ -1,5 +1,5 @@
 {
-	"name": "ds_infoTab",
+	"name": "ds_data_src",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_sqlserver",
@@ -23,26 +23,15 @@
 				"precision": 10
 			},
 			{
-				"name": "gend",
-				"type": "varchar"
-			},
-			{
-				"name": "dno",
-				"type": "int",
-				"precision": 10
-			},
-			{
-				"name": "dname",
-				"type": "varchar"
-			},
-			{
-				"name": "dlocation",
-				"type": "varchar"
+				"name": "lastmodifytime",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
 			}
 		],
 		"typeProperties": {
 			"schema": "dbo",
-			"table": "infotab"
+			"table": "data_src"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"

@@ -1,5 +1,5 @@
 {
-	"name": "ds_trans",
+	"name": "ds_dele",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_myfactory",
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "trans.txt",
+				"fileName": "dele.txt",
 				"fileSystem": "mydata"
 			},
 			"columnDelimiter": ",",
@@ -20,7 +20,27 @@
 		},
 		"schema": [
 			{
-				"name": "pid,cid,price,ts",
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "name",
+				"type": "String"
+			},
+			{
+				"name": "sal",
+				"type": "String"
+			},
+			{
+				"name": "gend",
+				"type": "String"
+			},
+			{
+				"name": "dno",
+				"type": "String"
+			},
+			{
+				"name": "city",
 				"type": "String"
 			}
 		]

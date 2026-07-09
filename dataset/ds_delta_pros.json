@@ -1,5 +1,5 @@
 {
-	"name": "ds_trans",
+	"name": "ds_delta_pros",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_myfactory",
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "trans.txt",
+				"fileName": "delta_pros.txt",
 				"fileSystem": "mydata"
 			},
 			"columnDelimiter": ",",
@@ -20,7 +20,19 @@
 		},
 		"schema": [
 			{
-				"name": "pid,cid,price,ts",
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "name",
+				"type": "String"
+			},
+			{
+				"name": "salary",
+				"type": "String"
+			},
+			{
+				"name": "company",
 				"type": "String"
 			}
 		]

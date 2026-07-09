@@ -2,7 +2,7 @@
 	"name": "ds_dno",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_kumar1001",
+			"referenceName": "ls_myfactory",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
@@ -10,7 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "dno.text",
+				"fileName": "dno.num.txt",
 				"fileSystem": "mydata"
 			},
 			"columnDelimiter": ",",
@@ -25,10 +25,6 @@
 			},
 			{
 				"name": "dname",
-				"type": "String"
-			},
-			{
-				"name": "location",
 				"type": "String"
 			}
 		]
