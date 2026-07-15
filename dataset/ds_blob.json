@@ -1,17 +1,16 @@
 {
-	"name": "ds_target",
+	"name": "ds_blob",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "ls_myfactory",
+			"referenceName": "ls_blob_1",
 			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
 			"location": {
-				"type": "AzureBlobFSLocation",
-				"fileName": "employejason",
-				"fileSystem": "target"
+				"type": "AzureBlobStorageLocation",
+				"container": "mydata"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

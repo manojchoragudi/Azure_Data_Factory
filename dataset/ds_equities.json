@@ -1,5 +1,5 @@
 {
-	"name": "ds_employee",
+	"name": "ds_equities",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_myfactory",
@@ -10,37 +10,65 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "employee2.txt",
+				"fileName": "equities.txt",
 				"fileSystem": "mydata"
 			},
 			"columnDelimiter": ",",
-			"escapeChar": "",
+			"escapeChar": "\\",
 			"firstRowAsHeader": true,
-			"quoteChar": ""
+			"quoteChar": "\""
 		},
 		"schema": [
 			{
-				"name": "id",
+				"name": "symbol",
 				"type": "String"
 			},
 			{
-				"name": "name",
+				"name": "1",
 				"type": "String"
 			},
 			{
-				"name": "sal",
+				"name": "2",
 				"type": "String"
 			},
 			{
-				"name": "gend",
+				"name": "3",
 				"type": "String"
 			},
 			{
-				"name": "dno",
+				"name": "4",
 				"type": "String"
 			},
 			{
-				"name": "city",
+				"name": "5",
+				"type": "String"
+			},
+			{
+				"name": "6",
+				"type": "String"
+			},
+			{
+				"name": "7",
+				"type": "String"
+			},
+			{
+				"name": "8",
+				"type": "String"
+			},
+			{
+				"name": "9",
+				"type": "String"
+			},
+			{
+				"name": "10",
+				"type": "String"
+			},
+			{
+				"name": "11",
+				"type": "String"
+			},
+			{
+				"name": "12",
 				"type": "String"
 			}
 		]

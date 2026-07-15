@@ -1,0 +1,505 @@
+{
+	"name": "wed_output_jason",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_myfactory",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "ids.txt",
+				"fileSystem": "target"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "[{\"id\":1",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Tiger Nixon\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"320800\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"61\"3",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}4",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":2",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Garrett Winters\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"170750\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"63\"",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}9",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":3",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Ashton Cox\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"86000\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"66\"13",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}14",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":4",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Cedric Kelly\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"433060\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"22\"18",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}19",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":5",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Airi Satou\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"162700\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"33\"",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}24",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":6",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Brielle Williamson\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"372000\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"61\"28",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}29",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":7",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Herrod Chandler\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"137500\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"59\"33",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}34",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":8",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Rhona Davidson\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"327900\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"55\"",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}39",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":9",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Colleen Hurst\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"205500\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"39\"",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}44",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":10",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Sonya Frost\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"103600\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"23\"48",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}49",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":11",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Jena Gaines\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"90560\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"30\"53",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}54",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":12",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Quinn Flynn\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"342000\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"22\"58",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}59",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":13",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Charde Marshall\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"470600\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"36\"",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}64",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":14",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Haley Kennedy\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"313500\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"43\"",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}69",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":15",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Tatyana Fitzpatrick\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"385750\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"19\"",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}74",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":16",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Michael Silva\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"198500\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"66\"78",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}79",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":17",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Paul Byrd\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"725000\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"64\"",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}84",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":18",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Gloria Little\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"237500\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"59\"88",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}89",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":19",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Bradley Greer\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"132000\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"41\"",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}94",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":20",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Dai Rios\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"217500\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"35\"",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}99",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":21",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Jenette Caldwell\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"345000\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"30\"103",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}104",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":22",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Yuri Berry\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"675000\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"40\"",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}109",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":23",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Caesar Vance\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"106450\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"21\"",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}114",
+				"type": "String"
+			},
+			{
+				"name": "{\"id\":24",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_name\":\"Doris Wilder\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_salary\":\"85600\"",
+				"type": "String"
+			},
+			{
+				"name": "\"employee_age\":\"23\"118",
+				"type": "String"
+			},
+			{
+				"name": "\"profile_image\":\"\"}]",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

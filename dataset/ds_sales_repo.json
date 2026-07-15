@@ -1,5 +1,5 @@
 {
-	"name": "ds_target",
+	"name": "ds_sales_repo",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_myfactory",
@@ -10,15 +10,22 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "employejason",
-				"fileSystem": "target"
+				"fileName": "salesrep.txt",
+				"fileSystem": "mydata"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
-			"firstRowAsHeader": true,
+			"firstRowAsHeader": false,
 			"quoteChar": "\""
 		},
-		"schema": []
+		"schema": [
+			{
+				"type": "String"
+			},
+			{
+				"type": "String"
+			}
+		]
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }

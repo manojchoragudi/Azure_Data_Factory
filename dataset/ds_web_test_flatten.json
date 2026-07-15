@@ -1,0 +1,39 @@
+{
+	"name": "ds_web_test_flatten",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_myfactory",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Json",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "ids.txt",
+				"fileSystem": "target"
+			}
+		},
+		"schema": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "integer"
+				},
+				"employee_name": {
+					"type": "string"
+				},
+				"employee_salary": {
+					"type": "string"
+				},
+				"employee_age": {
+					"type": "string"
+				},
+				"profile_image": {
+					"type": "string"
+				}
+			}
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

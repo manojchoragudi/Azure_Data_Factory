@@ -1,0 +1,24 @@
+{
+	"name": "pl_monthlysales",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "monthlyreport",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/mydata/blobs/",
+			"ignoreEmptyBlobs": false,
+			"scope": "/subscriptions/1792bd66-1431-48bb-8b82-7821e6d4f526/resourceGroups/MyPractice/providers/Microsoft.Storage/storageAccounts/kumar133",
+			"events": [
+				"Microsoft.Storage.BlobDeleted"
+			]
+		}
+	}
+}

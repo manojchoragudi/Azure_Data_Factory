@@ -1,5 +1,5 @@
 {
-	"name": "ds_target",
+	"name": "employdetails",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "ls_myfactory",
@@ -10,15 +10,28 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "employejason",
-				"fileSystem": "target"
+				"fileName": "empdetails.txt",
+				"fileSystem": "mydata"
 			},
 			"columnDelimiter": ",",
-			"escapeChar": "\\",
+			"escapeChar": "",
 			"firstRowAsHeader": true,
-			"quoteChar": "\""
+			"quoteChar": ""
 		},
-		"schema": []
+		"schema": [
+			{
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": " name",
+				"type": "String"
+			},
+			{
+				"name": " score",
+				"type": "String"
+			}
+		]
 	},
 	"type": "Microsoft.DataFactory/factories/datasets"
 }
